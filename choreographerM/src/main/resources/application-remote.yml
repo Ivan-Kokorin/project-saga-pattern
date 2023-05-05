@@ -2,7 +2,8 @@ spring:
 
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://host.docker.internal:5432/e-market
+#    url: jdbc:postgresql://host.docker.internal:5432/e-market
+    url: jdbc:postgresql://localhost:5432/e-market
     username: postgres
     password: password
 

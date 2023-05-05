@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @Import({KafkaConfig.class})
-@EnableRabbit
-@EnableJpaRepositories
 public class ChoreographerMApplication {
 
 	public static void main(String[] args) {
