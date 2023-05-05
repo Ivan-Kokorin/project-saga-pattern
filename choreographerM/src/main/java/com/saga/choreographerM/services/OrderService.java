@@ -1,8 +1,7 @@
-package com.saga.choreographerM;
+package com.saga.choreographerM.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import org.apache.kafka.clients.producer.Producer;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.saga.choreographerM.model.OrderDto;
 import org.springframework.stereotype.Service;
 
 @Service

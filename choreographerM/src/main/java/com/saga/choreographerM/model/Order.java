@@ -1,4 +1,4 @@
-package com.saga.choreographerM;
+package com.saga.choreographerM.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;

@@ -1,4 +1,4 @@
-package com.saga.choreographerM;
+package com.saga.choreographerM.config;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.saga.choreographerM;
+package com.saga.choreographerM.model;
 
 import jakarta.persistence.Column;
 import lombok.Data;

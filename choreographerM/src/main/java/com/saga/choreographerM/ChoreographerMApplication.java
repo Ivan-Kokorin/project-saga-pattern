@@ -1,10 +1,9 @@
 package com.saga.choreographerM;
 
-import org.springframework.amqp.rabbit.annotation.EnableRabbit;
+import com.saga.choreographerM.config.KafkaConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @Import({KafkaConfig.class})
