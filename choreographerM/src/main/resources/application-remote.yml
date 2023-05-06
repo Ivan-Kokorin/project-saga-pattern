@@ -1,4 +1,7 @@
 spring:
+  kafka:
+    consumer:
+      group-id: "default"
 
   datasource:
     driver-class-name: org.postgresql.Driver
@@ -13,9 +16,14 @@ spring:
     show-sql: true
     properties:
       hibernate.dialect: org.hibernate.dialect.PostgreSQL82Dialect
-
+  topic-order:
+    name: t.product.create-order
+  topic-order-created:
+    name: t.product.order-created
+  topic-check-product:
+    name: t.product.check-product
+  topic-product-checked:
+    name: t.product.product-checked
 server:
   port: 8099
 
-topic:
-  name: t.product.order

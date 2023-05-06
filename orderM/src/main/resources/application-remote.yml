@@ -20,4 +20,4 @@ spring:
     port: 8081
 
   topic:
-    name: t.product.order
+    name: t.product.create-order
