@@ -1,4 +1,4 @@
-package com.saga.choreographerM.model;
+package com.saga.orderM.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
@@ -29,4 +29,9 @@ public class Order {
 
     @Column
     private Integer amount;
+
+    @PrePersist
+    public void prePersist() {
+        this.created = LocalDateTime.now();
+    }
 }
