@@ -14,7 +14,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class ConsumerOrderImpl implements Consumer {
-    private static final String orderTopic = "${spring.topic-order-created.name}";
+//    private static final String orderCreatedTopic = "${spring.spring.topic-order-created.name.name}";
+    private static final String orderCreatedTopic = "${spring.topic-order-created.name}";
+    private static final String productCheckedTopic = "${spring.topic-product-checked:.name}";
 
     private final ObjectMapper objectMapper;
     private final OrderService orderService;
@@ -26,11 +28,20 @@ public class ConsumerOrderImpl implements Consumer {
     }
 
     @Override
-    @KafkaListener(topics = orderTopic)
+    @KafkaListener(topics = orderCreatedTopic)
     public void consumeMessageAboutOrderChecked(String message) throws JsonProcessingException {
         log.info("message consumed {}", message);
 
         OrderDto orderDto = objectMapper.readValue(message, OrderDto.class);
         orderService.sendForProcessing(orderDto, ProducerTopic.PRODUCT);
+    }
+
+    @Override
+    @KafkaListener(topics = orderCreatedTopic)
+    public void consumeMessageAboutProductChecked(String message) throws JsonProcessingException {
+        log.info("message consumed {}", message);
+
+        OrderDto orderDto = objectMapper.readValue(message, OrderDto.class);
+        //Todo ожидание ответа пользователя
     }
 }
