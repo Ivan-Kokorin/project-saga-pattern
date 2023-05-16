@@ -36,8 +36,7 @@ public class ConsumerOrderImpl implements Consumer {
     @Override
     @KafkaListener(topics = orderCreatedTopic)
     public void consumeMessageAboutOrderChecked(String message) throws JsonProcessingException {
-        log.info("message consumed {}", message);
-
+        log.info("message consumed (order checked) {}", message);
         OrderDto orderDto = objectMapper.readValue(message, OrderDto.class);
         UtilsClient.statusRequest.put(orderDto.getIdRequest(), StatusRq.CREATED_ORDER);
         orderService.sendForProcessing(orderDto, ProducerTopic.PRODUCT);
@@ -46,15 +45,16 @@ public class ConsumerOrderImpl implements Consumer {
     @Override
     @KafkaListener(topics = productCheckedTopic)
     public void consumeMessageAboutProductChecked(String message) throws JsonProcessingException {
-        log.info("message consumed {}", message);
+        log.info("message consumed (product checked) {}", message);
         OrderDto orderDto = objectMapper.readValue(message, OrderDto.class);
         UtilsClient.statusRequest.put(orderDto.getIdRequest(), StatusRq.WAITING_FOR_PAYMENT);
+        orderService.sendForProcessing(orderDto, ProducerTopic.WAITING_FOR_PAYMENT);
     }
 
     @Override
     @KafkaListener(topics = productFailCheckedTopic)
     public void consumeMessageAboutFailProductChecked(String message) throws JsonProcessingException {
-        log.info("message consumed {}", message);
+        log.info("message consumed (fail product checked) {}", message);
         OrderDto orderDto = objectMapper.readValue(message, OrderDto.class);
         UtilsClient.statusRequest.put(orderDto.getIdRequest(), StatusRq.FAIL_CHECKED_PRODUCT);
         orderService.sendForProcessing(orderDto, ProducerTopic.DELETE_ORDER);
@@ -63,7 +63,7 @@ public class ConsumerOrderImpl implements Consumer {
     @Override
     @KafkaListener(topics = orderDeletedTopic)
     public void consumeMessageAboutDeletedOrder(String message) throws JsonProcessingException {
-        log.info("message consumed {}", message);
+        log.info("message consumed (deleted order) {}", message);
         OrderDto orderDto = objectMapper.readValue(message, OrderDto.class);
         UtilsClient.statusRequest.put(orderDto.getIdRequest(), StatusRq.DELETED_ORDER);
     }

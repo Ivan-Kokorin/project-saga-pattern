@@ -20,6 +20,8 @@ spring:
     name: t.product.create-order
   topic-delete-order:
     name: t.product.delete-order
+  topic-waiting-for-payment:
+    name: t.product.waiting-for-payment
 
 server:
   port: 8081

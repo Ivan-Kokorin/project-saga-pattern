@@ -1,4 +1,4 @@
-package com.saga.choreographerM.Utils;
+package com.saga.productM.Utils;
 
 public enum StatusRq {
     START_PROCESSING_ORDER("accepted for processing"),

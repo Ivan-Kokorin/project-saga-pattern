@@ -31,17 +31,17 @@ public class OrderController {
     public String createOrder(@RequestBody OrderDto orderDto) throws JsonProcessingException, InterruptedException {
         orderDto.setCreated(LocalDateTime.now());
         orderDto.setIdRequest(UtilsClient.createIdRequest(orderDto.getCreated()));
-        orderDto.setStatus("accepted for processing");
+        orderDto.setStatus(StatusRq.START_PROCESSING_ORDER.getStatus());
         UtilsClient.statusRequest.put(orderDto.getIdRequest(), StatusRq.START_PROCESSING_ORDER);
-        log.info("create order request received" + orderDto);
+        log.info("create order request received " + orderDto);
         orderService.sendForProcessing(orderDto, ProducerTopic.ORDER);
         //todo write a better implementation of expectation
         while (UtilsClient.statusRequest.get(orderDto.getIdRequest()) != StatusRq.WAITING_FOR_PAYMENT && UtilsClient.statusRequest.get(orderDto.getIdRequest()) != StatusRq.DELETED_ORDER) {
             Thread.sleep(1000);
         }
         if (UtilsClient.statusRequest.get(orderDto.getIdRequest()) == StatusRq.WAITING_FOR_PAYMENT) {
-            return "Waiting for payment...";
+            return StatusRq.WAITING_FOR_PAYMENT.getStatus();
         }
-        return "Failed order";
+        return StatusRq.FAIL_CHECKED_PRODUCT.getStatus();
     }
 }

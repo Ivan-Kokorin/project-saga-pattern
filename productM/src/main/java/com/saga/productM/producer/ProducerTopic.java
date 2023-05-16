@@ -1,8 +1,8 @@
 package com.saga.productM.producer;
 
 public enum ProducerTopic {
-    PRODUCT_CHECKED("t.product.product-checked"),
-    FAIL_PRODUCT_CHECKED("t.product.fail-product-checked"),
+    CHECKED_PRODUCT("t.product.product-checked"),
+    FAIL_CHECKED_PRODUCT("t.product.fail-product-checked"),
     PRODUCT_FREEZE("t.product.product-freezed");
     private String topic;
 
