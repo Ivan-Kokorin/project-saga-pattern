@@ -13,7 +13,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class ConsumerOrderImpl implements Consumer {
-    private static final String orderTopic = "${spring.topic.name}";
+    private static final String orderTopic = "${spring.topic-create-order.name}";
+    private static final String deleteTopic = "${spring.topic-delete-order.name}";
     private final ObjectMapper objectMapper;
     private final OrderService orderService;
 
@@ -25,11 +26,20 @@ public class ConsumerOrderImpl implements Consumer {
 
     @Override
     @KafkaListener(topics = orderTopic)
-    public void consumeMessage(String message) throws JsonProcessingException {
+    public void consumeCreateOrderMessage(String message) throws JsonProcessingException {
         log.info("message consumed {}", message);
-
         OrderDto orderDto = objectMapper.readValue(message, OrderDto.class);
         OrderDto persistedOrderDto = orderService.persistOrder(orderDto);
         orderService.sendForProcessing(persistedOrderDto, ProducerTopic.CHECKED_ORDER);
+    }
+
+    @Override
+    @KafkaListener(topics = deleteTopic)
+    public void consumeDeleteOrderMessage(String message) throws JsonProcessingException {
+        log.info("message consumed {}", message);
+        OrderDto orderDto = objectMapper.readValue(message, OrderDto.class);
+        orderDto.setStatus(StatusOrder.ERROR_CHECKED_PRODUCT.getStatus());
+        OrderDto updatedOrderDto = orderService.persistOrder(orderDto);
+        orderService.sendForProcessing(updatedOrderDto, ProducerTopic.DELETED_ORDER);
     }
 }

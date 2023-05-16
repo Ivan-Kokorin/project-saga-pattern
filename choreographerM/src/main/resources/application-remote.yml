@@ -24,6 +24,10 @@ spring:
     name: t.product.check-product
   topic-product-checked:
     name: t.product.product-checked
+  topic-fail-product-checked:
+    name: t.product.fail-product-checked
+  topic-deleted-order:
+    name: t.product.deleted-order
 server:
   port: 8099
 

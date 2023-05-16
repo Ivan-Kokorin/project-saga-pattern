@@ -1,6 +1,7 @@
 package com.saga.choreographerM.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.saga.choreographerM.Utils.StatusRq;
 import com.saga.choreographerM.Utils.UtilsClient;
 import com.saga.choreographerM.model.OrderDto;
 import com.saga.choreographerM.producer.ProducerTopic;
@@ -13,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -22,7 +21,6 @@ import java.util.Map;
 public class OrderController {
     private final OrderService orderService;
 
-    public static Map<String, StatusRq> statusRequest = new HashMap<>();
 
     @Autowired
     public OrderController(OrderService orderService) {
@@ -34,13 +32,16 @@ public class OrderController {
         orderDto.setCreated(LocalDateTime.now());
         orderDto.setIdRequest(UtilsClient.createIdRequest(orderDto.getCreated()));
         orderDto.setStatus("accepted for processing");
-        statusRequest.put(orderDto.getIdRequest(), StatusRq.CREATE_ORDER);
+        UtilsClient.statusRequest.put(orderDto.getIdRequest(), StatusRq.START_PROCESSING_ORDER);
         log.info("create order request received" + orderDto);
         orderService.sendForProcessing(orderDto, ProducerTopic.ORDER);
         //todo write a better implementation of expectation
-        while (statusRequest.get(orderDto.getIdRequest()) != StatusRq.WAITING_FOR_PAYMENT) {
+        while (UtilsClient.statusRequest.get(orderDto.getIdRequest()) != StatusRq.WAITING_FOR_PAYMENT && UtilsClient.statusRequest.get(orderDto.getIdRequest()) != StatusRq.DELETED_ORDER) {
             Thread.sleep(1000);
         }
-        return "Waiting for payment...";
+        if (UtilsClient.statusRequest.get(orderDto.getIdRequest()) == StatusRq.WAITING_FOR_PAYMENT) {
+            return "Waiting for payment...";
+        }
+        return "Failed order";
     }
 }

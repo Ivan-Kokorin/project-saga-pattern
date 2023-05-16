@@ -16,8 +16,10 @@ spring:
     properties:
       hibernate.dialect: org.hibernate.dialect.PostgreSQL82Dialect
 
-  topic:
+  topic-create-order:
     name: t.product.create-order
+  topic-delete-order:
+    name: t.product.delete-order
 
 server:
   port: 8081
