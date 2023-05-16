@@ -16,8 +16,8 @@ spring:
     properties:
       hibernate.dialect: org.hibernate.dialect.PostgreSQL82Dialect
 
-  server:
-    port: 8082
-
   topic-check-product:
     name: t.product.check-product
+
+server:
+  port: 8082

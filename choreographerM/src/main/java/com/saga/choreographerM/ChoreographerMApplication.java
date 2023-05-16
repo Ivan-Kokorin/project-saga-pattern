@@ -6,7 +6,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
-@Import({KafkaConfig.class})
 public class ChoreographerMApplication {
 
 	public static void main(String[] args) {

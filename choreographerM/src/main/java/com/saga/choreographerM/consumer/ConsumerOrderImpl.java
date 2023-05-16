@@ -3,6 +3,8 @@ package com.saga.choreographerM.consumer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.saga.choreographerM.controller.OrderController;
+import com.saga.choreographerM.controller.StatusRq;
 import com.saga.choreographerM.producer.ProducerTopic;
 import com.saga.choreographerM.services.OrderService;
 import com.saga.choreographerM.model.OrderDto;
@@ -16,7 +18,7 @@ import org.springframework.stereotype.Component;
 public class ConsumerOrderImpl implements Consumer {
 //    private static final String orderCreatedTopic = "${spring.spring.topic-order-created.name.name}";
     private static final String orderCreatedTopic = "${spring.topic-order-created.name}";
-    private static final String productCheckedTopic = "${spring.topic-product-checked:.name}";
+    private static final String productCheckedTopic = "${spring.topic-product-checked.name}";
 
     private final ObjectMapper objectMapper;
     private final OrderService orderService;
@@ -37,11 +39,10 @@ public class ConsumerOrderImpl implements Consumer {
     }
 
     @Override
-    @KafkaListener(topics = orderCreatedTopic)
+    @KafkaListener(topics = productCheckedTopic)
     public void consumeMessageAboutProductChecked(String message) throws JsonProcessingException {
         log.info("message consumed {}", message);
-
         OrderDto orderDto = objectMapper.readValue(message, OrderDto.class);
-        //Todo ожидание ответа пользователя
+        OrderController.statusRequest.put(orderDto.getIdRequest(), StatusRq.WAITING_FOR_PAYMENT);
     }
 }

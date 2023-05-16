@@ -1,6 +1,5 @@
 package com.saga.choreographerM.model;
 
-import jakarta.persistence.Column;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -8,8 +7,9 @@ import java.time.LocalDateTime;
 @Data
 public class OrderDto {
     private Long id;
+    private String idRequest;
     private Long idUser;
-    private String nameProduct;
+    private String idProduct;
     private Integer amount;
     private String status;
     private LocalDateTime created;
@@ -17,8 +17,10 @@ public class OrderDto {
     @Override
     public String toString() {
         return "OrderDto{" +
-                "idUser=" + idUser +
-                ", nameProduct='" + nameProduct + '\'' +
+                "id=" + id +
+                ", idRequest='" + idRequest + '\'' +
+                ", idUser=" + idUser +
+                ", nameProduct='" + idProduct + '\'' +
                 ", amount=" + amount +
                 ", status='" + status + '\'' +
                 ", created=" + created +

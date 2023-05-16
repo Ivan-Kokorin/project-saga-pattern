@@ -32,6 +32,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = modelMapper.map(orderDto, Order.class);
         Order persistedOrder = orderRepository.save(order);
         OrderDto persistedOrderDto = modelMapper.map(persistedOrder, OrderDto.class);
+        persistedOrderDto.setIdRequest(orderDto.getIdRequest());
         log.info("order persisted {}", persistedOrder);
         return persistedOrderDto;
     }

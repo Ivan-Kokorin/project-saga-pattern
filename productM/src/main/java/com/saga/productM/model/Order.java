@@ -25,7 +25,7 @@ public class Order {
     private LocalDateTime created;
 
     @Column
-    private String nameProduct;
+    private String idProduct;
 
     @Column
     private Integer amount;
