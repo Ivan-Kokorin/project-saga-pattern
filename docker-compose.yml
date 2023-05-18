@@ -1,8 +1,8 @@
 version: "3.7"
 
 networks:
-  kafka-net:
-    name: kafka-net
+  distributed-net:
+    name: distributed-net
     driver: bridge
 
 services:
@@ -11,7 +11,7 @@ services:
     container_name: zookeeper
     restart: "no"
     networks:
-      - kafka-net
+      - distributed-net
     ports:
       - "2181:2181"
 
@@ -20,7 +20,7 @@ services:
     container_name: kafka
     restart: "no"
     networks:
-      - kafka-net
+      - distributed-net
     ports:
       - "9092:9092"
     environment:
@@ -39,10 +39,51 @@ services:
     container_name: kafdrop
     restart: "no"
     networks:
-      - kafka-net
+      - distributed-net
     ports:
       - "9000:9000"
     environment:
       KAFKA_BROKERCONNECT: "kafka:29092"
     depends_on:
       - "kafka"
+
+  choreographerm:
+    container_name: choreographerm
+    restart: "no"
+    networks:
+      - distributed-net
+    build:
+      context: ./choreographerM
+      dockerfile: Dockerfile
+    ports:
+      - "8099:8099"
+    environment:
+      SPRING_KAFKA_BOOTSTRAPSERVERS: "kafka:29092"
+    depends_on:
+      - kafka
+
+  productm:
+    container_name: productm
+    restart: "no"
+    networks:
+      - distributed-net
+    build:
+      context: ./productM
+      dockerfile: Dockerfile
+    environment:
+      SPRING_KAFKA_BOOTSTRAPSERVERS: "kafka:29092"
+    depends_on:
+      - kafka
+
+  orderm:
+    container_name: orderm
+    restart: "no"
+    networks:
+      - distributed-net
+    build:
+      context: ./orderM
+      dockerfile: Dockerfile
+    environment:
+      SPRING_KAFKA_BOOTSTRAPSERVERS: "kafka:29092"
+    depends_on:
+      - kafka
