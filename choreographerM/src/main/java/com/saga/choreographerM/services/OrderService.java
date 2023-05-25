@@ -8,4 +8,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface OrderService {
     public String sendForProcessing(OrderDto orderDto, ProducerTopic topic) throws JsonProcessingException;
+    public OrderDto supplementNewDto(OrderDto orderDto);
 }

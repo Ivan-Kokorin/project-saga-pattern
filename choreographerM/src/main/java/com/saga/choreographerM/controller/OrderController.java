@@ -29,14 +29,11 @@ public class OrderController {
 
     @PostMapping
     public String createOrder(@RequestBody OrderDto orderDto) throws JsonProcessingException, InterruptedException {
-        orderDto.setCreated(LocalDateTime.now());
-        orderDto.setIdRequest(UtilsClient.createIdRequest(orderDto.getCreated()));
-        orderDto.setStatus(StatusRq.START_PROCESSING_ORDER.getStatus());
-        UtilsClient.statusRequest.put(orderDto.getIdRequest(), StatusRq.START_PROCESSING_ORDER);
+        orderService.supplementNewDto(orderDto);
         log.info("create order request received " + orderDto);
         orderService.sendForProcessing(orderDto, ProducerTopic.ORDER);
         //todo write a better implementation of expectation
-        while (UtilsClient.statusRequest.get(orderDto.getIdRequest()) != StatusRq.WAITING_FOR_PAYMENT && UtilsClient.statusRequest.get(orderDto.getIdRequest()) != StatusRq.DELETED_ORDER) {
+        while (UtilsClient.statusRequest.get(orderDto.getIdRequest()) != StatusRq.WAITING_FOR_PAYMENT && UtilsClient.statusRequest.get(orderDto.getIdRequest()) != StatusRq.DELETED_ORDER && UtilsClient.statusRequest.get(orderDto.getIdRequest()) != StatusRq.FAIL_CHECKED_PRODUCT) {
             Thread.sleep(1000);
         }
         if (UtilsClient.statusRequest.get(orderDto.getIdRequest()) == StatusRq.WAITING_FOR_PAYMENT) {
