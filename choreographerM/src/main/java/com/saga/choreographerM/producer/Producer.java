@@ -4,5 +4,5 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.saga.choreographerM.model.OrderDto;
 
 public interface Producer {
-    public String sendMessage(OrderDto orderDto, ProducerTopic topic) throws JsonProcessingException;
+    public String sendMessage(String topic, OrderDto orderDto) throws JsonProcessingException;
 }

@@ -21,9 +21,9 @@ public class ProducerOrderImpl implements Producer{
     }
 
     @Override
-    public String sendMessage(OrderDto orderDto, ProducerTopic topic) throws JsonProcessingException {
+    public String sendMessage(String topic, OrderDto orderDto) throws JsonProcessingException {
         String orderAsMessage = objectMapper.writeValueAsString(orderDto);
-        kafkaTemplate.send(topic.getTopic(), orderAsMessage);
+        kafkaTemplate.send(topic, orderAsMessage);
         log.info("order produced {}", orderAsMessage);
         return "message sent";
     }

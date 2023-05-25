@@ -18,6 +18,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public String sendForProcessing(OrderDto orderDto, ProducerTopic topic) throws JsonProcessingException {
-        return producer.sendMessage(orderDto, topic);
+        return producer.sendMessage(topic.getTopic(), orderDto);
     }
 }
